@@ -15,10 +15,8 @@
             --text: #ffffff;
             --text-dim: #b3b3b3;
             --bg-grad: linear-gradient(135deg, #050505, #111827, #000000);
-            --glass-bg: rgba(25, 25, 35, 0.4);
+            --glass-bg: rgba(25, 25, 35, 0.5);
             --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            --glass-item: rgba(255, 255, 255, 0.03);
             --glow: rgba(0, 123, 255, 0.15);
         }
 
@@ -34,55 +32,69 @@
         }
 
         .glass-panel {
-            background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: var(--glass-shadow);
+            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
             transform: translateZ(0); backface-visibility: hidden;
         }
 
+        /* INITIAL OVERLAY */
+        #init-overlay {
+            position: fixed; inset: 0; z-index: 10000; background: var(--bg-grad);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        }
+
+        /* SIDEBAR */
         .sidebar { width: 300px; display: flex; flex-direction: column; padding: 25px 20px; gap: 15px; flex-shrink: 0; }
         .nav-header { font-size: 22px; font-weight: 800; color: var(--accent); letter-spacing: 2px; }
-        .circular-box { background: var(--glass-item); border: 1px solid var(--glass-border); border-radius: 20px; padding: 15px; cursor: pointer; }
+        .circular-box { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 15px; cursor: pointer; }
         .expand-content { display: none; margin-top: 15px; max-height: 150px; overflow-y: auto; }
         .expand-content.active { display: block; }
         .lib-item { padding: 8px 12px; border-radius: 10px; font-size: 14px; margin-bottom: 5px; cursor: pointer; transition: 0.2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .lib-item:hover { background: var(--glass-item); color: var(--accent); }
+        .lib-item:hover { background: rgba(255,255,255,0.05); color: var(--accent); }
 
+        /* MAIN VIEW */
         .main-view { flex-grow: 1; padding: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
         .visualizer-container { width: 160px; height: 160px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; }
-        .visualizer { width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--accent); background: linear-gradient(135deg, var(--accent), transparent); transition: 0.3s; }
+        .visualizer { width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--accent); background: linear-gradient(135deg, var(--accent), transparent); transition: 0.5s; }
         .playing-animation { animation: pulse 2s infinite alternate ease-in-out; }
         @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); box-shadow: 0 0 30px var(--accent); } }
 
-        .waveform { display: flex; gap: 5px; height: 40px; align-items: flex-end; position: absolute; opacity: 0; transition: 0.3s; }
+        .waveform { display: flex; gap: 5px; height: 40px; align-items: flex-end; position: absolute; opacity: 0; transition: 0.3s; pointer-events: none; }
         .waveform.active { opacity: 1; }
         .bar { width: 6px; background: var(--accent); border-radius: 3px; height: 5px; transition: height 0.1s; }
 
         button {
-            background: linear-gradient(45deg, var(--accent), var(--accent-glow)); color: #fff; border: none; padding: 12px 25px; 
+            background: linear-gradient(45deg, var(--accent), var(--accent-glow)); color: #fff; border: none; padding: 14px 30px; 
             border-radius: 25px; font-weight: 600; cursor: pointer; transition: 0.3s; font-family: 'Outfit';
         }
         button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4); }
-        .glass-btn { background: var(--glass-item); border: 1px solid var(--glass-border); color: #fff; }
 
         .search-area { width: 100%; max-width: 500px; display: flex; gap: 10px; margin-top: 25px; }
-        input[type="text"] { background: var(--glass-item); border: 1px solid var(--glass-border); color: #fff; padding: 15px; border-radius: 25px; outline: none; width: 100%; font-family: 'Outfit'; }
+        input[type="text"] { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; padding: 15px; border-radius: 25px; outline: none; width: 100%; font-family: 'Outfit'; }
         
         .progress-container { width: 100%; max-width: 500px; margin-top: 20px; display: flex; align-items: center; gap: 10px; }
         #seek-bar { flex-grow: 1; accent-color: var(--accent); cursor: pointer; }
 
+        /* CANVAS */
         .video-canvas { width: 300px; padding: 20px; display: flex; flex-direction: column; gap: 15px; flex-shrink: 0; }
         .player-wrapper { width: 100%; height: 450px; border-radius: 20px; overflow: hidden; background: #000; position: relative; }
-        #player-a, #player-b { position: absolute; top: 0; left: -38.5%; width: 177%; height: 100%; pointer-events: none; transition: opacity 0.5s; }
-        .hidden { opacity: 0; }
+        #player-a, #player-b { position: absolute; top: 0; left: -38.5%; width: 177%; height: 100%; transition: opacity 0.8s ease-in-out; }
+        .hidden { opacity: 0; pointer-events: none; }
 
-        .like-btn { width: 55px; height: 55px; border-radius: 50%; border: 1px solid var(--glass-border); background: var(--glass-item); color: var(--accent); display: flex; align-items: center; justify-content: center; cursor: pointer; margin: 10px auto; }
+        .like-btn { width: 55px; height: 55px; border-radius: 50%; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.03); color: var(--accent); display: flex; align-items: center; justify-content: center; cursor: pointer; margin: 10px auto; transition: 0.3s; }
         .like-btn svg { width: 24px; height: 24px; fill: currentColor; }
 
-        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 9999; justify-content: center; align-items: center; }
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 9999; justify-content: center; align-items: center; }
         .popup { width: 340px; padding: 30px; }
     </style>
 </head>
 <body class="theme-dark">
+
+    <div id="init-overlay">
+        <h1 style="font-weight: 800; letter-spacing: 4px; color: var(--accent);">CROSSFADER</h1>
+        <p style="color: var(--text-dim); margin-bottom: 30px;">Click below to initialize high-fidelity audio engine</p>
+        <button onclick="startApp()" style="font-size: 18px;">START AUDIO ENGINE</button>
+    </div>
 
     <div class="sidebar glass-panel">
         <div class="nav-header">CROSSFADER</div>
@@ -94,12 +106,12 @@
             <h4>History</h4>
             <div id="history-content" class="expand-content"></div>
         </div>
-        <button class="glass-btn" onclick="toggleSettings(true)" style="margin-top: auto;">System Settings</button>
+        <button onclick="toggleSettings(true)" style="margin-top: auto; background: rgba(255,255,255,0.05); color: #fff;">Settings</button>
     </div>
 
     <div class="main-view glass-panel">
         <div style="position: absolute; top: 30px; right: 40px; color: var(--accent); font-weight: 600;">
-            Hi, <span id="display-name" style="color:#fff">Unknown</span>
+            User: <span id="display-name" style="color:#fff">Unknown</span>
         </div>
         
         <div class="visualizer-container">
@@ -109,16 +121,16 @@
             </div>
         </div>
 
-        <h2 id="track-name" style="text-align:center; margin: 20px 0 5px;">Search to DJ</h2>
+        <h2 id="track-name" style="text-align:center; margin: 20px 0 5px; font-weight: 800; font-size: 28px;">Engine Ready</h2>
         
         <div class="progress-container">
-            <span id="cur-time" style="font-size: 12px;">0:00</span>
+            <span id="cur-time" style="font-size: 12px; min-width: 35px;">0:00</span>
             <input type="range" id="seek-bar" value="0">
-            <span id="total-dur" style="font-size: 12px;">0:00</span>
+            <span id="total-dur" style="font-size: 12px; min-width: 35px;">0:00</span>
         </div>
 
         <div class="search-area">
-            <input type="text" id="search-input" placeholder="Search song or artist...">
+            <input type="text" id="search-input" placeholder="Search (Data Saver Active)..." onkeydown="if(event.key==='Enter') search()">
             <button onclick="search()" id="search-btn">Search</button>
         </div>
         <div id="results" style="width:100%; max-width:500px; margin-top:15px; overflow-y:auto; flex-grow:1;"></div>
@@ -138,30 +150,40 @@
         <div class="popup glass-panel">
             <h3 style="color:var(--accent); margin-top:0;">Profile Settings</h3>
             <input type="text" id="name-input" placeholder="Enter Name" style="width:100%; box-sizing:border-box; margin-bottom:15px;">
-            <button onclick="saveName()" style="width:100%;">Save Profile</button>
-            <button class="glass-btn" onclick="toggleSettings(false)" style="width:100%; margin-top:10px; border:none;">Close</button>
+            <button onclick="saveName()" style="width:100%;">Save</button>
+            <button onclick="toggleSettings(false)" style="width:100%; margin-top:10px; background:none; border:1px solid #444;">Close</button>
         </div>
     </div>
 
     <script>
-        let playerA, playerB, activeStr = 'A', isPlaying = false, waveInt, seekInt;
-        let playlistQueue = [], currentTrack = null;
+        let playerA, playerB, activePlayer = 'A', isPlaying = false, isFading = false;
+        let playlistQueue = [], currentTrackIndex = 0;
+        let waveInt, seekInt, crossfadeMonitor;
 
         const tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(tag);
 
         function onYouTubeIframeAPIReady() {
-            const v = {controls:0, disablekb:1, rel:0, modestbranding:1, iv_load_policy:3, origin: window.location.origin};
-            playerA = new YT.Player('player-a', {playerVars: v, events: { 'onStateChange': onState }});
-            playerB = new YT.Player('player-b', {playerVars: v, events: { 'onStateChange': onState }});
+            const vars = {controls:0, disablekb:1, rel:0, modestbranding:1, iv_load_policy:3, vq:'tiny', origin: window.location.origin};
+            playerA = new YT.Player('player-a', {playerVars: vars, events: { 'onStateChange': onState }});
+            playerB = new YT.Player('player-b', {playerVars: vars, events: { 'onStateChange': onState }});
+        }
+
+        function startApp() {
+            document.getElementById('init-overlay').style.display = 'none';
+            // Secret trick: play a silent second to "warm up" the audio context
+            playerA.cueVideoById('3000'); 
+            playerB.cueVideoById('3000');
         }
 
         function onState(e) {
-            if (e.data === 1) {
+            if (e.data === YT.PlayerState.PLAYING) {
                 isPlaying = true;
                 document.getElementById('visualizer').style.opacity = '0';
                 document.getElementById('waveform').classList.add('active');
-                startWave(true);
-                startSeek();
+                startWave(true); startSeek();
+                e.target.setPlaybackQuality('tiny'); 
+            } else if (e.data === YT.PlayerState.ENDED) {
+                if(!isFading) playNext();
             } else {
                 isPlaying = false;
                 document.getElementById('visualizer').style.opacity = '1';
@@ -177,8 +199,8 @@
             btn.innerText = "Finding...";
             
             const gateways = [
+                `https://pipedapi.lunar.icu/search?q=${encodeURIComponent(q + " audio")}&filter=videos`,
                 `https://pipedapi.kavin.rocks/search?q=${encodeURIComponent(q + " audio")}&filter=videos`,
-                `https://pipedapi.tokhmi.xyz/search?q=${encodeURIComponent(q + " audio")}&filter=videos`,
                 `https://iv.melmac.space/api/v1/search?q=${encodeURIComponent(q + " audio")}&type=video`
             ];
 
@@ -192,40 +214,89 @@
                 } catch(e) {}
             }
 
-            if(!data) { alert("Search failed. Check your internet or try again."); btn.innerText = "Search"; return; }
+            if(!data) { alert("Try another song."); btn.innerText = "Search"; return; }
 
             const target = document.getElementById('results'); target.innerHTML = '';
-            // Clean the IDs (Removes full URLs if proxy sends them)
-            playlistQueue = data.slice(0, 8).map(i => {
-                let id = i.videoId || i.id;
-                if(id && id.includes("v=")) id = id.split("v=")[1].split("&")[0];
-                return { id: id, title: i.title };
-            });
+            playlistQueue = data.slice(0, 8).map(i => ({ id: i.videoId || i.id, title: i.title }));
             
             playlistQueue.forEach((item, idx) => {
-                if(!item.id) return;
                 const d = document.createElement('div');
-                d.className = 'lib-item'; d.style.background = 'var(--glass-item)';
+                d.className = 'lib-item'; d.style.background = 'rgba(255,255,255,0.03)';
                 d.innerHTML = `<strong>${item.title}</strong>`;
                 d.onclick = () => play(idx);
                 target.appendChild(d);
             });
             btn.innerText = "Search";
-            if(playlistQueue.length > 0) play(0);
+            play(0);
         }
 
         function play(idx) {
-            currentTrack = playlistQueue[idx];
-            document.getElementById('track-name').innerText = currentTrack.title;
-            let p = activeStr === 'A' ? playerA : playerB;
-            p.loadVideoById(currentTrack.id);
-            addHistory(currentTrack);
+            isFading = false;
+            currentTrackIndex = idx;
+            const track = playlistQueue[idx];
+            document.getElementById('track-name').innerText = track.title;
+            
+            let p = activePlayer === 'A' ? playerA : playerB;
+            p.loadVideoById({videoId: track.id, suggestedQuality: 'tiny'});
+            p.setVolume(100);
+            
+            addHistory(track);
+            startCrossfadeMonitor();
         }
+
+        function startCrossfadeMonitor() {
+            clearInterval(crossfadeMonitor);
+            crossfadeMonitor = setInterval(() => {
+                let p = activePlayer === 'A' ? playerA : playerB;
+                if(p && p.getDuration && !isFading) {
+                    let timeLeft = p.getDuration() - p.getCurrentTime();
+                    if(timeLeft <= 7 && timeLeft > 0 && playlistQueue[currentTrackIndex + 1]) {
+                        runCrossfade();
+                    }
+                }
+            }, 1000);
+        }
+
+        function runCrossfade() {
+            isFading = true;
+            let nextIdx = currentTrackIndex + 1;
+            let outP = activePlayer === 'A' ? playerA : playerB;
+            let inP = activePlayer === 'A' ? playerB : playerA;
+            
+            activePlayer = (activePlayer === 'A') ? 'B' : 'A';
+            currentTrackIndex = nextIdx;
+            
+            const track = playlistQueue[nextIdx];
+            document.getElementById('track-name').innerText = track.title;
+            
+            // Switch UI
+            document.getElementById('player-a').classList.toggle('hidden');
+            document.getElementById('player-b').classList.toggle('hidden');
+            
+            inP.loadVideoById({videoId: track.id, suggestedQuality: 'tiny'});
+            inP.setVolume(0);
+            inP.playVideo();
+
+            let vol = 0;
+            let fade = setInterval(() => {
+                vol += 5;
+                inP.setVolume(vol);
+                outP.setVolume(100 - vol);
+                if(vol >= 100) {
+                    clearInterval(fade);
+                    outP.stopVideo();
+                    isFading = false;
+                    addHistory(track);
+                }
+            }, 300);
+        }
+
+        function playNext() { if(currentTrackIndex + 1 < playlistQueue.length) play(currentTrackIndex + 1); }
 
         function startSeek() {
             clearInterval(seekInt);
             seekInt = setInterval(() => {
-                let p = activeStr === 'A' ? playerA : playerB;
+                let p = activePlayer === 'A' ? playerA : playerB;
                 if(p && p.getCurrentTime) {
                     let c = p.getCurrentTime(), d = p.getDuration();
                     document.getElementById('seek-bar').max = d;
@@ -237,54 +308,33 @@
         }
 
         document.getElementById('seek-bar').oninput = function() {
-            (activeStr === 'A' ? playerA : playerB).seekTo(this.value);
+            (activePlayer === 'A' ? playerA : playerB).seekTo(this.value);
         };
 
-        function fmt(s) { let m = Math.floor(s/60), sc = Math.floor(s%60); return m + ":" + (sc<10?"0"+sc:sc); }
+        function fmt(s) { let m = Math.floor(s/60), sc = Math.floor(s%60); return m+":"+(sc<10?"0"+sc:sc); }
         function startWave(p) { clearInterval(waveInt); if(p) waveInt = setInterval(() => document.querySelectorAll('.bar').forEach(b => b.style.height = Math.random()*35+5+'px'), 150); }
         function toggleExpand(id) { document.getElementById(id).classList.toggle('active'); }
         function toggleSettings(s) { document.getElementById('settings-overlay').style.display = s?'flex':'none'; }
-        
-        function saveName() {
-            const n = document.getElementById('name-input').value || 'Unknown';
-            localStorage.setItem('cf_user', n);
-            document.getElementById('display-name').innerText = n;
-            toggleSettings(false);
-        }
-
+        function saveName() { localStorage.setItem('cf_user', document.getElementById('name-input').value); location.reload(); }
         function addHistory(t) {
             let h = JSON.parse(localStorage.getItem('cf_h') || '[]');
             h = [t, ...h.filter(x => x.id !== t.id)].slice(0, 10);
             localStorage.setItem('cf_h', JSON.stringify(h));
             render();
         }
-
         function likeCurrent() {
-            if(!currentTrack) return;
+            const t = playlistQueue[currentTrackIndex]; if(!t) return;
             let l = JSON.parse(localStorage.getItem('cf_l') || '[]');
-            if(!l.find(x => x.id === currentTrack.id)) {
-                l.push(currentTrack); localStorage.setItem('cf_l', JSON.stringify(l)); render();
-            }
+            if(!l.find(x => x.id === t.id)) { l.push(t); localStorage.setItem('cf_l', JSON.stringify(l)); render(); }
         }
-
         function render() {
-            const l = JSON.parse(localStorage.getItem('cf_l') || '[]');
-            const h = JSON.parse(localStorage.getItem('cf_h') || '[]');
+            const l = JSON.parse(localStorage.getItem('cf_l') || '[]'), h = JSON.parse(localStorage.getItem('cf_h') || '[]');
             document.getElementById('liked-count').innerText = l.length;
             document.getElementById('liked-content').innerHTML = l.map(i => `<div class="lib-item" onclick="playSingle('${i.id}','${i.title.replace(/'/g,"")}')">${i.title}</div>`).join('');
             document.getElementById('history-content').innerHTML = h.map(i => `<div class="lib-item" onclick="playSingle('${i.id}','${i.title.replace(/'/g,"")}')">${i.title}</div>`).join('');
         }
-
         function playSingle(id, title) { playlistQueue = [{id, title}]; play(0); }
-
-        document.addEventListener('keydown', (e) => {
-            if(e.key === ' ' && document.activeElement.tagName !== 'INPUT') {
-                e.preventDefault();
-                let p = activeStr === 'A' ? playerA : playerB;
-                if(p.getPlayerState() === 1) { p.pauseVideo(); isPlaying = false; }
-                else { p.playVideo(); isPlaying = true; }
-            }
-        });
+        function hardResetData() { localStorage.clear(); location.reload(); }
 
         window.onload = () => {
             const n = localStorage.getItem('cf_user') || 'Unknown';
